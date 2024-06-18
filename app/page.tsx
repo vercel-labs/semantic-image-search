@@ -1,5 +1,6 @@
 import { CardGridSkeleton } from "@/components/card-grid-skeleton";
 import { DeployButton } from "@/components/deploy-button";
+import { ErrorComponent } from "@/components/error";
 import { ImageSearch } from "@/components/image-search";
 import { SearchBox } from "@/components/search-box";
 import { getImages } from "@/lib/db/api";
@@ -45,5 +46,11 @@ export default function Home({
 }
 
 const SuspendedImageSearch = async ({ query }: { query?: string }) => {
-  return <ImageSearch images={await getImages(query)} query={query} />;
+  const { images, error } = await getImages(query);
+
+  if (error) {
+    return <ErrorComponent error={error} />;
+  }
+
+  return <ImageSearch images={images} query={query} />;
 };

@@ -8,7 +8,7 @@
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";

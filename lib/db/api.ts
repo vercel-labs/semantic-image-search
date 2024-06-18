@@ -11,9 +11,7 @@ import {
 import { db } from ".";
 import { DBImage, images } from "./schema";
 import { generateEmbedding } from "../ai/utils";
-import { createStreamableValue } from "ai/rsc";
 import { kv } from "@vercel/kv";
-import { ImageStreamStatus } from "../utils";
 
 const { embedding: _, ...rest } = getTableColumns(images);
 const imagesWithoutEmbedding = {
@@ -61,7 +59,9 @@ function uniqueItemsByObject(items: DBImage[]): DBImage[] {
   return uniqueItems;
 }
 
-export const getImages = async (query?: string) => {
+export const getImages = async (
+  query?: string,
+): Promise<{ images: DBImage[]; error?: Error }> => {
   try {
     const formattedQuery = query
       ? "q:" + query?.replaceAll(" ", "_")
@@ -69,7 +69,7 @@ export const getImages = async (query?: string) => {
 
     const cached = await kv.get<DBImage[]>(formattedQuery);
     if (cached) {
-      return cached;
+      return { images: cached };
     } else {
       if (query === undefined || query.length < 3) {
         const allImages = await db
@@ -77,7 +77,7 @@ export const getImages = async (query?: string) => {
           .from(images)
           .limit(20);
         await kv.set("all_images", JSON.stringify(allImages));
-        return allImages;
+        return { images: allImages };
       } else {
         const directMatches = await findImageByQuery(query);
         const semanticMatches = await findSimilarContent(query);
@@ -89,12 +89,14 @@ export const getImages = async (query?: string) => {
         );
 
         await kv.set(formattedQuery, JSON.stringify(allMatches));
-        return allMatches;
+        return { images: allMatches };
       }
     }
   } catch (e) {
-    const empty: DBImage[] = [];
-    return empty;
-    console.error(e);
+    if (e instanceof Error) return { error: e, images: [] };
+    return {
+      images: [],
+      error: { message: "Error, please try again." } as Error,
+    };
   }
 };
