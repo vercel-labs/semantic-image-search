@@ -8,7 +8,7 @@
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";
@@ -22,6 +22,7 @@ export function SearchBox({
 }) {
   const [input, setInput] = useState(query ?? "");
   const [, startTransition] = useTransition();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const validQuery = input.length > 2;
 
@@ -41,6 +42,7 @@ export function SearchBox({
       setInput("");
       router.push(`/`);
       router.refresh();
+      inputRef.current?.focus();
     });
   };
 
@@ -70,6 +72,7 @@ export function SearchBox({
             <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
             <Input
               disabled={disabled}
+              ref={inputRef}
               autoFocus
               value={input}
               minLength={3}
