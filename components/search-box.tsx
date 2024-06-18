@@ -7,8 +7,14 @@
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { SearchIcon } from "lucide-react";
-import { TransitionStartFunction, useEffect, useRef, useState } from "react";
+import { CornerDownLeft, SearchIcon, Send } from "lucide-react";
+import {
+  TransitionStartFunction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";
@@ -50,9 +56,9 @@ export function SearchBox({
   };
 
   useEffect(() => {
-    if (validQuery) {
-      search();
-    }
+    // if (validQuery) {
+    //   search();
+    // }
     if (input.length === 0 && query) {
       resetQuery();
     }
@@ -70,35 +76,41 @@ export function SearchBox({
           if (validQuery) search();
         }}
       >
-        <div className="relative flex items-center">
-          <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
-          <Input
-            disabled={disabled}
-            value={input}
-            ref={inputRef}
-            minLength={3}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(event) => {
-              if (event.metaKey && event.key === "Backspace") {
-                resetQuery();
+        <div className="relative flex items-center space-x-2">
+          <div className="relative w-full flex items-center">
+            <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
+            <Input
+              disabled={disabled}
+              autoFocus
+              value={input}
+              ref={inputRef}
+              minLength={3}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(event) => {
+                if (event.metaKey && event.key === "Backspace") {
+                  resetQuery();
+                }
+              }}
+              className={
+                "w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
               }
-            }}
-            className={
-              "w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
-            }
-            placeholder="Search..."
-          />
-          {input.length > 0 ? (
-            <Button
-              className="absolute right-2 text-gray-400 rounded-full h-8 w-8"
-              variant="ghost"
-              type="reset"
-              size={"icon"}
-              onClick={() => resetQuery()}
-            >
-              <X height="16" width="16" />
-            </Button>
-          ) : null}
+              placeholder="Search..."
+            />
+            {input.length > 0 ? (
+              <Button
+                className="absolute right-2 text-gray-400 rounded-full h-8 w-8"
+                variant="ghost"
+                type="reset"
+                size={"icon"}
+                onClick={() => resetQuery()}
+              >
+                <X height="16" width="16" />
+              </Button>
+            ) : null}
+          </div>
+          <Button variant={"default"} size="icon">
+            <CornerDownLeft height={16} />
+          </Button>
         </div>
       </form>
     </div>

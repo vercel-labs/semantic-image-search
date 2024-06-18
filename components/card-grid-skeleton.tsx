@@ -1,10 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchBox } from "./search-box";
 
-export function CardGridSkeletonWithSearchBar() {
+export function CardGridSkeletonWithSearchBar({ query }: { query?: string }) {
   return (
     <div>
-      <SearchBox query="" disabled />
+      <SearchBox query={query ?? ""} />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
         {new Array(16).fill("").map((_, i) => (
           <SkeletonCard key={i} />

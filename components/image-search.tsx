@@ -2,20 +2,15 @@
 
 import { ImageCard } from "./image-card";
 import { DBImage } from "@/lib/db/schema";
-import { StreamableValue, useStreamableValue } from "ai/rsc";
 import { useSearchParams } from "next/navigation";
 import { NoImagesFound } from "./no-images-found";
 import { SearchBox } from "./search-box";
-import { useTransition } from "react";
-import { ImageStreamStatus, cn } from "@/lib/utils";
+import { useState, useTransition } from "react";
+import { cn } from "@/lib/utils";
 import { CardGridSkeleton } from "./card-grid-skeleton";
 
-export const ImageSearch = (props: {
-  images: StreamableValue<DBImage[]>;
-  status: StreamableValue<ImageStreamStatus>;
-}) => {
-  const [images] = useStreamableValue(props.images);
-  const [status, , streamLoading] = useStreamableValue(props.status);
+export const ImageSearch = (props: { images: DBImage[] }) => {
+  const [images] = useState(props.images);
 
   const [loading, startTransition] = useTransition();
 
@@ -26,10 +21,7 @@ export const ImageSearch = (props: {
     <div>
       <SearchBox query={query} startTransition={startTransition} />
       <div>
-        {images &&
-        images.length === 0 &&
-        loading === false &&
-        streamLoading === false ? (
+        {images && images.length === 0 && loading === false ? (
           <NoImagesFound query={query ?? ""} />
         ) : (
           <div
@@ -37,7 +29,7 @@ export const ImageSearch = (props: {
               "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 relative",
             )}
           >
-            {loading || streamLoading ? (
+            {loading ? (
               <CardGridSkeleton />
             ) : (
               images &&

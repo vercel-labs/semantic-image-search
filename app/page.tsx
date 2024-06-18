@@ -1,7 +1,7 @@
 import { CardGridSkeletonWithSearchBar } from "@/components/card-grid-skeleton";
 import { DeployButton } from "@/components/deploy-button";
 import { ImageSearch } from "@/components/image-search";
-import { getImagesStreamed } from "@/lib/db/api";
+import { getImages } from "@/lib/db/api";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -33,7 +33,10 @@ export default function Home({
         by GPT-4o).
       </p>
       <div className="border-border border-t pt-4 space-y-4">
-        <Suspense fallback={<CardGridSkeletonWithSearchBar />}>
+        <Suspense
+          fallback={<CardGridSkeletonWithSearchBar query={searchParams.q} />}
+          key={searchParams.q}
+        >
           <SuspendedImageSearch query={searchParams.q} />
         </Suspense>
       </div>
@@ -42,7 +45,7 @@ export default function Home({
 }
 
 const SuspendedImageSearch = async ({ query }: { query?: string }) => {
-  const { images, status } = await getImagesStreamed(query);
+  const images = await getImages(query);
 
-  return <ImageSearch images={images} status={status} />;
+  return <ImageSearch images={images} />;
 };
