@@ -76,8 +76,8 @@ export const getImagesStreamed = async (query?: string) => {
 
       const cached = await kv.get<DBImage[]>(formattedQuery);
       if (cached) {
-        streamableImages.done(cached);
         streamableStatus.done({ regular: false, semantic: false });
+        streamableImages.done(cached);
         return {
           images: streamableImages.value,
           status: streamableStatus.value,
