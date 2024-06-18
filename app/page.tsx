@@ -2,19 +2,14 @@ import { CardGridSkeletonWithSearchBar } from "@/components/card-grid-skeleton";
 import { DeployButton } from "@/components/deploy-button";
 import { ImageSearch } from "@/components/image-search";
 import { getImagesStreamed } from "@/lib/db/api";
-import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
-
-export const dynamic = "force-dynamic";
 
 export default function Home({
   searchParams,
 }: {
   searchParams: { q?: string };
 }) {
-  noStore();
-
   return (
     <main className="p-8 space-y-4">
       <div className="flex justify-between">
