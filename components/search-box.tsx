@@ -7,23 +7,21 @@
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { CornerDownLeft, SearchIcon } from "lucide-react";
-import { TransitionStartFunction, useEffect, useRef, useState } from "react";
+import { SearchIcon } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";
 
 export function SearchBox({
   query,
-  startTransition,
   disabled,
 }: {
-  query: string | null;
-  startTransition?: TransitionStartFunction;
+  query?: string | null;
   disabled?: boolean;
 }) {
   const [input, setInput] = useState(query ?? "");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [, startTransition] = useTransition();
 
   const validQuery = input.length > 2;
 
@@ -31,22 +29,19 @@ export function SearchBox({
 
   const search = debounce(() => {
     if (input !== query) {
-      // startTransition &&
-      //   startTransition(() => {
-      let newParams = new URLSearchParams([["q", input]]);
-      input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
-      // });
+      startTransition(() => {
+        let newParams = new URLSearchParams([["q", input]]);
+        input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
+      });
     }
   }, 300);
 
   const resetQuery = () => {
-    setInput("");
-    // startTransition &&
-    //   startTransition(() => {
-    router.push(`/`);
-    router.refresh();
-    inputRef.current?.focus();
-    // });
+    startTransition(() => {
+      setInput("");
+      router.push(`/`);
+      router.refresh();
+    });
   };
 
   useEffect(() => {
@@ -77,7 +72,6 @@ export function SearchBox({
               disabled={disabled}
               autoFocus
               value={input}
-              ref={inputRef}
               minLength={3}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(event) => {

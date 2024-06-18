@@ -1,6 +1,7 @@
-import { CardGridSkeletonWithSearchBar } from "@/components/card-grid-skeleton";
+import { CardGridSkeleton } from "@/components/card-grid-skeleton";
 import { DeployButton } from "@/components/deploy-button";
 import { ImageSearch } from "@/components/image-search";
+import { SearchBox } from "@/components/search-box";
 import { getImages } from "@/lib/db/api";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -10,6 +11,7 @@ export default function Home({
 }: {
   searchParams: { q?: string };
 }) {
+  const query = searchParams.q;
   return (
     <main className="p-8 space-y-4">
       <div className="flex justify-between">
@@ -33,11 +35,9 @@ export default function Home({
         by GPT-4o).
       </p>
       <div className="border-border border-t pt-4 space-y-4">
-        <Suspense
-          fallback={<CardGridSkeletonWithSearchBar query={searchParams.q} />}
-          key={searchParams.q}
-        >
-          <SuspendedImageSearch query={searchParams.q} />
+        <SearchBox query={query} />
+        <Suspense fallback={<CardGridSkeleton />} key={query}>
+          <SuspendedImageSearch query={query} />
         </Suspense>
       </div>
     </main>
@@ -45,7 +45,5 @@ export default function Home({
 }
 
 const SuspendedImageSearch = async ({ query }: { query?: string }) => {
-  const images = await getImages(query);
-
-  return <ImageSearch images={images} />;
+  return <ImageSearch images={await getImages(query)} query={query} />;
 };
