@@ -1,4 +1,5 @@
 import { CardGridSkeleton } from "@/components/card-grid-skeleton";
+import { DeployButton } from "@/components/deploy-button";
 import { ImageSearch } from "@/components/image-search";
 import { getImagesStreamed } from "@/lib/db/api";
 import { unstable_noStore as noStore } from "next/cache";
@@ -16,7 +17,10 @@ export default function Home({
 
   return (
     <main className="p-8 space-y-4">
-      <h1 className="font-medium text-2xl">Semantic Image Search</h1>
+      <div className="flex justify-between">
+        <h1 className="font-medium text-2xl">Semantic Image Search</h1>
+        <DeployButton />
+      </div>
       <p>
         This demo showcases how to use the{" "}
         <Link
