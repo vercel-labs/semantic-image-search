@@ -9,6 +9,7 @@ import { SearchBox } from "./search-box";
 import { useTransition } from "react";
 import { ImageStreamStatus, cn } from "@/lib/utils";
 import { LoadingSpinner } from "./loading-spinner";
+import { CardGridSkeleton } from "./card-grid-skeleton";
 
 export const ImageSearch = (props: {
   images: StreamableValue<DBImage[]>;
@@ -37,17 +38,18 @@ export const ImageSearch = (props: {
               "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 relative",
             )}
           >
-            {images &&
+            {loading || streamLoading ? (
+              <CardGridSkeleton />
+            ) : (
+              images &&
               images?.map((image) => (
                 <ImageCard
                   key={"image_" + image.id}
                   image={image}
                   similarity={image.similarity}
                 />
-              ))}
-            {loading || streamLoading ? (
-              <LoadingSpinner status={status} />
-            ) : null}
+              ))
+            )}
           </div>
         )}
       </div>
