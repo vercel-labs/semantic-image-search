@@ -36,7 +36,6 @@ export default function Home({
       </p>
       <div className="border-border border-t pt-4 space-y-4">
         <SearchBox query={query} />
-        <CardGridSkeleton />
         <Suspense fallback={<CardGridSkeleton />} key={query}>
           <SuspendedImageSearch query={query} />
         </Suspense>
