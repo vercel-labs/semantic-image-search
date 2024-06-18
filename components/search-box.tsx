@@ -8,22 +8,20 @@
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "lucide-react";
-import { TransitionStartFunction, useEffect, useRef, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";
 
 export function SearchBox({
   query,
-  startTransition,
   disabled,
 }: {
-  query: string | null;
-  startTransition?: TransitionStartFunction;
+  query?: string | null;
   disabled?: boolean;
 }) {
   const [input, setInput] = useState(query ?? "");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [, startTransition] = useTransition();
 
   const validQuery = input.length > 2;
 
@@ -31,22 +29,19 @@ export function SearchBox({
 
   const search = debounce(() => {
     if (input !== query) {
-      startTransition &&
-        startTransition(() => {
-          let newParams = new URLSearchParams([["q", input]]);
-          input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
-        });
+      startTransition(() => {
+        let newParams = new URLSearchParams([["q", input]]);
+        input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
+      });
     }
   }, 300);
 
   const resetQuery = () => {
-    startTransition &&
-      startTransition(() => {
-        setInput("");
-        router.push(`/`);
-        router.refresh();
-        inputRef.current?.focus();
-      });
+    startTransition(() => {
+      setInput("");
+      router.push(`/`);
+      router.refresh();
+    });
   };
 
   useEffect(() => {
@@ -70,35 +65,37 @@ export function SearchBox({
           if (validQuery) search();
         }}
       >
-        <div className="relative flex items-center">
-          <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
-          <Input
-            disabled={disabled}
-            value={input}
-            ref={inputRef}
-            minLength={3}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(event) => {
-              if (event.metaKey && event.key === "Backspace") {
-                resetQuery();
+        <div className="relative flex items-center space-x-2">
+          <div className="relative w-full flex items-center">
+            <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
+            <Input
+              disabled={disabled}
+              autoFocus
+              value={input}
+              minLength={3}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(event) => {
+                if (event.metaKey && event.key === "Backspace") {
+                  resetQuery();
+                }
+              }}
+              className={
+                "w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
               }
-            }}
-            className={
-              "w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
-            }
-            placeholder="Search..."
-          />
-          {input.length > 0 ? (
-            <Button
-              className="absolute right-2 text-gray-400 rounded-full h-8 w-8"
-              variant="ghost"
-              type="reset"
-              size={"icon"}
-              onClick={() => resetQuery()}
-            >
-              <X height="16" width="16" />
-            </Button>
-          ) : null}
+              placeholder="Search..."
+            />
+            {input.length > 0 ? (
+              <Button
+                className="absolute right-2 text-gray-400 rounded-full h-8 w-8"
+                variant="ghost"
+                type="reset"
+                size={"icon"}
+                onClick={() => resetQuery()}
+              >
+                <X height="16" width="16" />
+              </Button>
+            ) : null}
+          </div>
         </div>
       </form>
     </div>

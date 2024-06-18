@@ -11,9 +11,7 @@ import {
 import { db } from ".";
 import { DBImage, images } from "./schema";
 import { generateEmbedding } from "../ai/utils";
-import { createStreamableValue } from "ai/rsc";
 import { kv } from "@vercel/kv";
-import { ImageStreamStatus } from "../utils";
 
 const { embedding: _, ...rest } = getTableColumns(images);
 const imagesWithoutEmbedding = {
@@ -61,56 +59,44 @@ function uniqueItemsByObject(items: DBImage[]): DBImage[] {
   return uniqueItems;
 }
 
-export const getImagesStreamed = async (query?: string) => {
-  const streamableImages = createStreamableValue<DBImage[]>();
-  const streamableStatus = createStreamableValue<ImageStreamStatus>({
-    regular: true,
-    semantic: false,
-  });
+export const getImages = async (
+  query?: string,
+): Promise<{ images: DBImage[]; error?: Error }> => {
+  try {
+    const formattedQuery = query
+      ? "q:" + query?.replaceAll(" ", "_")
+      : "all_images";
 
-  (async () => {
-    try {
-      const formattedQuery = query
-        ? "q:" + query?.replaceAll(" ", "_")
-        : "all_images";
-
-      const cached = await kv.get<DBImage[]>(formattedQuery);
-      if (cached) {
-        streamableImages.done(cached);
-        streamableStatus.done({ regular: false, semantic: false });
+    const cached = await kv.get<DBImage[]>(formattedQuery);
+    if (cached) {
+      return { images: cached };
+    } else {
+      if (query === undefined || query.length < 3) {
+        const allImages = await db
+          .select(imagesWithoutEmbedding)
+          .from(images)
+          .limit(20);
+        await kv.set("all_images", JSON.stringify(allImages));
+        return { images: allImages };
       } else {
-        if (query === undefined || query.length < 3) {
-          const allImages = await db
-            .select(imagesWithoutEmbedding)
-            .from(images)
-            .limit(20);
-          streamableImages.done(allImages);
-          await kv.set("all_images", JSON.stringify(allImages));
-        } else {
-          streamableStatus.update({ semantic: true, regular: false });
-          const directMatches = await findImageByQuery(query);
-          streamableImages.update(
-            directMatches.map((directMatch) => ({
-              ...directMatch.image,
-              similarity: directMatch.similarity,
-            })),
-          );
-          const semanticMatches = await findSimilarContent(query);
-          const allMatches = uniqueItemsByObject(
-            [...directMatches, ...semanticMatches].map((image) => ({
-              ...image.image,
-              similarity: image.similarity,
-            })),
-          );
+        const directMatches = await findImageByQuery(query);
+        const semanticMatches = await findSimilarContent(query);
+        const allMatches = uniqueItemsByObject(
+          [...directMatches, ...semanticMatches].map((image) => ({
+            ...image.image,
+            similarity: image.similarity,
+          })),
+        );
 
-          streamableImages.done(allMatches);
-          await kv.set(formattedQuery, JSON.stringify(allMatches));
-        }
-        streamableStatus.done({ regular: false, semantic: false });
+        await kv.set(formattedQuery, JSON.stringify(allMatches));
+        return { images: allMatches };
       }
-    } catch (e) {
-      console.error(e);
     }
-  })();
-  return { images: streamableImages.value, status: streamableStatus.value };
+  } catch (e) {
+    if (e instanceof Error) return { error: e, images: [] };
+    return {
+      images: [],
+      error: { message: "Error, please try again." } as Error,
+    };
+  }
 };
