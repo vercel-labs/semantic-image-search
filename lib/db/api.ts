@@ -76,42 +76,38 @@ export const getImagesStreamed = async (query?: string) => {
 
       const cached = await kv.get<DBImage[]>(formattedQuery);
       if (cached) {
-        streamableStatus.done({ regular: false, semantic: false });
         streamableImages.done(cached);
-        return {
-          images: streamableImages.value,
-          status: streamableStatus.value,
-        };
-      }
-
-      if (query === undefined || query.length < 3) {
-        const allImages = await db
-          .select(imagesWithoutEmbedding)
-          .from(images)
-          .limit(20);
-        streamableImages.done(allImages);
-        await kv.set("all_images", JSON.stringify(allImages));
+        streamableStatus.done({ regular: false, semantic: false });
       } else {
-        streamableStatus.update({ semantic: true, regular: false });
-        const directMatches = await findImageByQuery(query);
-        streamableImages.update(
-          directMatches.map((directMatch) => ({
-            ...directMatch.image,
-            similarity: directMatch.similarity,
-          })),
-        );
-        const semanticMatches = await findSimilarContent(query);
-        const allMatches = uniqueItemsByObject(
-          [...directMatches, ...semanticMatches].map((image) => ({
-            ...image.image,
-            similarity: image.similarity,
-          })),
-        );
+        if (query === undefined || query.length < 3) {
+          const allImages = await db
+            .select(imagesWithoutEmbedding)
+            .from(images)
+            .limit(20);
+          streamableImages.done(allImages);
+          await kv.set("all_images", JSON.stringify(allImages));
+        } else {
+          streamableStatus.update({ semantic: true, regular: false });
+          const directMatches = await findImageByQuery(query);
+          streamableImages.update(
+            directMatches.map((directMatch) => ({
+              ...directMatch.image,
+              similarity: directMatch.similarity,
+            })),
+          );
+          const semanticMatches = await findSimilarContent(query);
+          const allMatches = uniqueItemsByObject(
+            [...directMatches, ...semanticMatches].map((image) => ({
+              ...image.image,
+              similarity: image.similarity,
+            })),
+          );
 
-        streamableImages.done(allMatches);
-        await kv.set(formattedQuery, JSON.stringify(allMatches));
+          streamableImages.done(allMatches);
+          await kv.set(formattedQuery, JSON.stringify(allMatches));
+        }
+        streamableStatus.done({ regular: false, semantic: false });
       }
-      streamableStatus.done({ regular: false, semantic: false });
     } catch (e) {
       console.error(e);
     }
