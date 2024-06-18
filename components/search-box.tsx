@@ -7,14 +7,8 @@
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { CornerDownLeft, SearchIcon, Send } from "lucide-react";
-import {
-  TransitionStartFunction,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { CornerDownLeft, SearchIcon } from "lucide-react";
+import { TransitionStartFunction, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { debounce } from "lodash";
 import { X } from "lucide-react";
@@ -37,28 +31,28 @@ export function SearchBox({
 
   const search = debounce(() => {
     if (input !== query) {
-      startTransition &&
-        startTransition(() => {
-          let newParams = new URLSearchParams([["q", input]]);
-          input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
-        });
+      // startTransition &&
+      //   startTransition(() => {
+      let newParams = new URLSearchParams([["q", input]]);
+      input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
+      // });
     }
   }, 300);
 
   const resetQuery = () => {
-    startTransition &&
-      startTransition(() => {
-        setInput("");
-        router.push(`/`);
-        router.refresh();
-        inputRef.current?.focus();
-      });
+    setInput("");
+    // startTransition &&
+    //   startTransition(() => {
+    router.push(`/`);
+    router.refresh();
+    inputRef.current?.focus();
+    // });
   };
 
   useEffect(() => {
-    // if (validQuery) {
-    //   search();
-    // }
+    if (validQuery) {
+      search();
+    }
     if (input.length === 0 && query) {
       resetQuery();
     }
@@ -108,9 +102,6 @@ export function SearchBox({
               </Button>
             ) : null}
           </div>
-          <Button variant={"default"} size="icon">
-            <CornerDownLeft height={16} />
-          </Button>
         </div>
       </form>
     </div>
