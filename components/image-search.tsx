@@ -18,7 +18,7 @@ export const ImageSearch = ({
 
 const ImageGrid = ({ images }: { images: DBImage[] }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 relative">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 relative">
       {images.map((image) => (
         <ImageCard
           key={"image_" + image.id}

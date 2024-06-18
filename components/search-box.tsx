@@ -80,7 +80,7 @@ export function SearchBox({
                 }
               }}
               className={
-                "w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
+                "text-base w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-blue-500"
               }
               placeholder="Search..."
             />
@@ -92,7 +92,7 @@ export function SearchBox({
                 size={"icon"}
                 onClick={() => resetQuery()}
               >
-                <X height="16" width="16" />
+                <X height="20" width="20" />
               </Button>
             ) : null}
           </div>
