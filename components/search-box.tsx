@@ -16,9 +16,11 @@ import { X } from "lucide-react";
 export function SearchBox({
   query,
   startTransition,
+  disabled,
 }: {
   query: string | null;
-  startTransition: TransitionStartFunction;
+  startTransition?: TransitionStartFunction;
+  disabled?: boolean;
 }) {
   const [input, setInput] = useState(query ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,20 +31,22 @@ export function SearchBox({
 
   const search = debounce(() => {
     if (input !== query) {
-      startTransition(() => {
-        let newParams = new URLSearchParams([["q", input]]);
-        input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
-      });
+      startTransition &&
+        startTransition(() => {
+          let newParams = new URLSearchParams([["q", input]]);
+          input.length === 0 ? router.push("/") : router.push(`?${newParams}`);
+        });
     }
   }, 300);
 
   const resetQuery = () => {
-    startTransition(() => {
-      setInput("");
-      router.push(`/`);
-      router.refresh();
-      inputRef.current?.focus();
-    });
+    startTransition &&
+      startTransition(() => {
+        setInput("");
+        router.push(`/`);
+        router.refresh();
+        inputRef.current?.focus();
+      });
   };
 
   useEffect(() => {
@@ -69,6 +73,7 @@ export function SearchBox({
         <div className="relative flex items-center">
           <SearchIcon className="absolute left-4 w-5 h-5 text-gray-500" />
           <Input
+            disabled={disabled}
             value={input}
             ref={inputRef}
             minLength={3}

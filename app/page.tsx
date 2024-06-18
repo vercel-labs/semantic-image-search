@@ -1,4 +1,4 @@
-import { CardGridSkeleton } from "@/components/card-grid-skeleton";
+import { CardGridSkeletonWithSearchBar } from "@/components/card-grid-skeleton";
 import { DeployButton } from "@/components/deploy-button";
 import { ImageSearch } from "@/components/image-search";
 import { getImagesStreamed } from "@/lib/db/api";
@@ -38,7 +38,7 @@ export default function Home({
         by GPT-4o).
       </p>
       <div className="border-border border-t pt-4 space-y-4">
-        <Suspense fallback={<CardGridSkeleton />}>
+        <Suspense fallback={<CardGridSkeletonWithSearchBar />}>
           <SuspendedImageSearch query={searchParams.q} />
         </Suspense>
       </div>

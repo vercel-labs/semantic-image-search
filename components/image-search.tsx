@@ -8,7 +8,6 @@ import { NoImagesFound } from "./no-images-found";
 import { SearchBox } from "./search-box";
 import { useTransition } from "react";
 import { ImageStreamStatus, cn } from "@/lib/utils";
-import { LoadingSpinner } from "./loading-spinner";
 import { CardGridSkeleton } from "./card-grid-skeleton";
 
 export const ImageSearch = (props: {
