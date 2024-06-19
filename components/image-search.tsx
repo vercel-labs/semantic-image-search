@@ -1,6 +1,9 @@
+"use client";
 import { ImageCard } from "./image-card";
 import { DBImage } from "@/lib/db/schema";
 import { NoImagesFound } from "./no-images-found";
+import { useSharedTransition } from "@/lib/hooks/use-shared-transition";
+import { CardGridSkeleton } from "./card-grid-skeleton";
 
 export const ImageSearch = ({
   images,
@@ -9,6 +12,10 @@ export const ImageSearch = ({
   images: DBImage[];
   query?: string;
 }) => {
+  const { isPending } = useSharedTransition();
+
+  if (isPending) return <CardGridSkeleton />;
+
   if (images.length === 0) {
     return <NoImagesFound query={query ?? ""} />;
   }

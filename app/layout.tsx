@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { TransitionProvider } from "@/lib/hooks/use-shared-transition";
 
 export const metadata: Metadata = {
   title: "Semantic Image Search Demo",
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn("font-sans antialiased", GeistSans.variable)}>
-        {children}
+        <TransitionProvider>{children}</TransitionProvider>
       </body>
     </html>
   );
