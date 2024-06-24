@@ -30,7 +30,7 @@ export default async function Home({
             Vercel AI SDK
           </Link>{" "}
           to build semantic search applications. Try searching for something
-          semantically, like "tasty food".
+          semantically, like &quot;tasty food&quot;.
         </p>
       </div>
       <div className="">
