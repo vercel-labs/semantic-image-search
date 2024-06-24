@@ -13,7 +13,7 @@ export default async function Home({
   const query = searchParams.q;
   return (
     <main className="p-8 space-y-4">
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="font-semibold text-2xl">Semantic Search</h1>
         </div>
