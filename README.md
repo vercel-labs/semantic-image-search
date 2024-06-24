@@ -50,6 +50,11 @@ Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_
 
 Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-postgres/quickstart) provided by Vercel. This guide will assist you in creating and configuring your Postgres database instance on Vercel, enabling your application to interact with it.
 
+Once you have instantiated your Vercel Postgres instance, run the following code to enable `pgvector`:
+```bash
+CREATE EXTENSION vector;
+```
+
 Remember to update your environment variables (`POSTGRES_URL`, `POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING`, `POSTGRES_USER`, `POSTGRES_HOST`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`) in the `.env` file with the appropriate credentials provided during the Postgres database setup.
 
 ### Creating a Blob Instance

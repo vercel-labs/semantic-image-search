@@ -14,10 +14,12 @@ export default async function Home({
   return (
     <main className="p-8 space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-semibold text-2xl">Semantic Search</h1>
+        <div>
+          <h1 className="font-semibold text-2xl">Semantic Search</h1>
+        </div>
         <DeployButton />
       </div>
-      <div className="py-2 space-y-2">
+      <div>
         <p>
           This demo showcases how to use the{" "}
           <Link
@@ -27,16 +29,12 @@ export default async function Home({
           >
             Vercel AI SDK
           </Link>{" "}
-          to build semantic search applications.
-        </p>
-        <p>
-          Search for an image! Your query will be embedded and then compared
-          against the embedded image metadata (titles and descriptions generated
-          by GPT-4o).
+          to build semantic search applications. Try searching for something
+          semantically, like &quot;tasty food&quot;.
         </p>
       </div>
-      <div className="border-border border-t pt-2">
-        <div className="pt-4">
+      <div className="">
+        <div className="pt-2">
           <SearchBox query={query} />
         </div>
         <Suspense fallback={<CardGridSkeleton />} key={query}>
