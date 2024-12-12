@@ -27,7 +27,7 @@ export default async function Home({
             className="text-blue-600 hover:underline"
             target="_blank"
           >
-            Vercel AI SDK
+            AI SDK
           </Link>{" "}
           to build semantic search applications. Try searching for something
           semantically, like &quot;tasty food&quot;.
