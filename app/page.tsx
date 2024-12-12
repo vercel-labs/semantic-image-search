@@ -8,9 +8,9 @@ import { Suspense } from "react";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const query = searchParams.q;
+  const query = (await searchParams).q;
   return (
     <main className="p-8 space-y-4">
       <div className="flex justify-between items-center">
@@ -27,7 +27,7 @@ export default async function Home({
             className="text-blue-600 hover:underline"
             target="_blank"
           >
-            Vercel AI SDK
+            AI SDK
           </Link>{" "}
           to build semantic search applications. Try searching for something
           semantically, like &quot;tasty food&quot;.
