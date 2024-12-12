@@ -8,9 +8,9 @@ import { Suspense } from "react";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const query = searchParams.q;
+  const query = (await searchParams).q;
   return (
     <main className="p-8 space-y-4">
       <div className="flex justify-between items-center">
