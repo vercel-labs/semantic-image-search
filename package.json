@@ -14,12 +14,12 @@
     "embed-and-save": "tsx lib/ai/2-embed-and-save.ts"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.0.8",
+    "@ai-sdk/openai": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@vercel/blob": "^0.27.0",
     "@vercel/kv": "^3.0.0",
     "@vercel/postgres": "^0.10.0",
-    "ai": "^4.0.16",
+    "ai": "^4.1.54",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.38.1",
