@@ -10,6 +10,8 @@ export type ImageMetadata = {
   };
 };
 
+export const embeddingModel = "openai/text-embedding-3-small";
+
 /**
  * Asynchronously gets all `.jpg` files in the specified directory.
  *
@@ -65,7 +67,7 @@ export async function getMetadataFile(path: string): Promise<ImageMetadata[]> {
 export const generateEmbedding = async (value: string): Promise<number[]> => {
   const input = value.replaceAll("\n", " ");
   const { embedding } = await embed({
-    model: "openai/text-embedding-3-small",
+    model: embeddingModel,
     value: input,
   });
   return embedding;
