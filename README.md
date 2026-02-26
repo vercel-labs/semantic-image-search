@@ -4,7 +4,7 @@
 </a>
 
 <p align="center">
-  An open-source AI semantic image search app template built with Next.js, the Vercel AI SDK, OpenAI, Vercel Postgres, Vercel Blob and Vercel KV.
+  An open-source AI semantic image search app template built with Next.js, the Vercel AI SDK, Vercel AI Gateway, Vercel Postgres, Vercel Blob and Vercel KV.
 </p>
 
 <p align="center">
@@ -21,7 +21,8 @@
 - [Next.js](https://nextjs.org) App Router
 - React Server Components (RSCs), Suspense, and Server Actions
 - [Vercel AI SDK](https://sdk.vercel.ai/docs) for multimodal prompting, generating & embedding image metadata, and streaming images from Server to Client
-- Support for OpenAI (default), Gemini, Anthropic, Cohere, or custom AI chat models
+- [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) for unified access to 100+ AI models with automatic auth, usage tracking, and no API key management
+- Support for OpenAI (default), Gemini, Anthropic, Cohere, and 100+ other models via the AI Gateway
 - [shadcn/ui](https://ui.shadcn.com)
   - Styling with [Tailwind CSS](https://tailwindcss.com)
   - [Radix UI](https://radix-ui.com) for headless component primitives
@@ -31,13 +32,13 @@
 
 ## Model Providers
 
-This template ships with OpenAI `GPT-4o` as the default. However, thanks to the [Vercel AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [Gemini](https://gemini.google.com/), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [more](https://sdk.vercel.ai/providers/ai-sdk-providers) with just a few lines of code.
+This template ships with OpenAI `GPT-4o` as the default, accessed via [Vercel AI Gateway](https://vercel.com/docs/ai-gateway). Thanks to the AI Gateway, you can switch to any of 100+ supported models from providers like [Gemini](https://gemini.google.com/), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [more](https://vercel.com/docs/ai-gateway#supported-models) by changing the model string (e.g. `"anthropic/claude-opus-4-5"`).
 
 ## Deploy Your Own
 
 You can deploy your own version of the Semantic Image Search App to Vercel with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fsemantic-image-search&env=OPENAI_API_KEY&envDescription=OpenAI%20key%20needed&envLink=https%3A%2F%2Fplatform.openai.com%2Fdocs%2Foverview)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fsemantic-image-search)
 
 ## Setup
 ### Creating a KV Database Instance
@@ -68,7 +69,7 @@ Remember to update your environment variable (`BLOB_READ_WRITE_TOKEN`) in the `.
 
 You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Semantic Image Search. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various accounts.
 
 1. Install Vercel CLI: `npm i -g vercel`
 2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
@@ -78,8 +79,12 @@ You will need to use the environment variables [defined in `.env.example`](.env.
 pnpm install
 ```
 
-## Add OpenAI API Key
-Be sure to add your OpenAI API Key to your `.env`.
+## Vercel AI Gateway Setup
+This project uses [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) instead of a direct OpenAI API key. When deployed on Vercel, authentication is handled automatically via OIDC — no API key needed.
+
+For local development, you have two options:
+- Run `vercel dev` instead of `pnpm run dev` for automatic token management
+- Or set `AI_GATEWAY_API_KEY` in your `.env` file (get your key from your [Vercel team's AI Gateway settings](https://vercel.com/dashboard/ai-gateway))
 
 ## Database Setup
 To push your schema changes to your Vercel Postgres database, run the following command.

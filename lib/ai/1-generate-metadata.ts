@@ -1,4 +1,3 @@
-import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import dotenv from "dotenv";
 import { z } from "zod";
@@ -21,7 +20,7 @@ async function main() {
       `Generating description for ${file} (${files.indexOf(file) + 1}/${files.length})`,
     );
     const result = await generateObject({
-      model: openai("gpt-4o"),
+      model: "openai/gpt-4o",
       schema: z.object({
         image: z.object({
           title: z.string().describe("an artistic title for the image"),
@@ -30,7 +29,7 @@ async function main() {
             .describe("A one sentence description of the image"),
         }),
       }),
-      maxTokens: 512,
+      maxOutputTokens: 512,
       messages: [
         {
           role: "user",
