@@ -4,7 +4,7 @@
 </a>
 
 <p align="center">
-  An open-source AI semantic image search app template built with Next.js, the Vercel AI SDK, Vercel AI Gateway, Vercel Postgres, Vercel Blob and Vercel KV.
+  An open-source AI semantic image search app template built with Next.js, the Vercel AI SDK, OpenAI, Vercel AI Gateway, Vercel Postgres, Vercel Blob and Vercel KV.
 </p>
 
 <p align="center">
@@ -69,7 +69,7 @@ Remember to update your environment variable (`BLOB_READ_WRITE_TOKEN`) in the `.
 
 You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Semantic Image Search. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various accounts.
+> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your accounts.
 
 1. Install Vercel CLI: `npm i -g vercel`
 2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
