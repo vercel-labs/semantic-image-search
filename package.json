@@ -14,12 +14,12 @@
     "embed-and-save": "tsx lib/ai/2-embed-and-save.ts"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.2.1",
+    "@ai-sdk/gateway": "^3.0.57",
     "@radix-ui/react-slot": "^1.1.0",
     "@vercel/blob": "^0.27.0",
     "@vercel/kv": "^3.0.0",
     "@vercel/postgres": "^0.10.0",
-    "ai": "^4.1.54",
+    "ai": "^6.0.103",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.38.1",
@@ -34,7 +34,7 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.4",
-    "zod": "^3.24.1"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",

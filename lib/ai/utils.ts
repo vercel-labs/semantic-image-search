@@ -1,4 +1,3 @@
-import { openai } from "@ai-sdk/openai";
 import { embed } from "ai";
 import fs from "fs";
 import path from "path";
@@ -11,7 +10,7 @@ export type ImageMetadata = {
   };
 };
 
-export const embeddingModel = openai.embedding("text-embedding-3-small");
+export const embeddingModel = "openai/text-embedding-3-small";
 
 /**
  * Asynchronously gets all `.jpg` files in the specified directory.
